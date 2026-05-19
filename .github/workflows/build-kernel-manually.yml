@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: fructosecloud/android_kernel_xiaomi_msm8998
-          ref: lineage-23.2   # 修改为实际分支
+          ref: lineage-23.2-patch   # 修改为实际分支
           path: kernel
 
       - name: Install dependencies
