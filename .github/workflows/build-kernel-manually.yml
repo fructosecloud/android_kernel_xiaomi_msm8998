@@ -92,3 +92,43 @@ jobs:
           name: kernel-Image.gz-dtb
           path: kernel/out/arch/arm64/boot/Image.gz-dtb
           retention-days: 7
+
+      - name: Package all kernel artifacts
+        run: |
+          cd kernel
+          mkdir -p artifacts
+
+          # 内核镜像
+          cp out/arch/arm64/boot/Image.gz-dtb artifacts/ 2>/dev/null || true
+          cp out/arch/arm64/boot/Image.gz artifacts/ 2>/dev/null || true
+          cp out/arch/arm64/boot/Image artifacts/ 2>/dev/null || true
+
+          # 设备树 dtb 文件
+          find out/arch/arm64/boot/dts -name "*.dtb" -exec cp {} artifacts/ \; 2>/dev/null || true
+
+          # 内核模块（.ko），保持相对路径（去掉 out/ 前缀）
+          if find out -name "*.ko" | grep -q .; then
+            mkdir -p artifacts/modules
+            find out -name "*.ko" -exec sh -c 'dest="artifacts/modules/${1#out/}"; mkdir -p "$(dirname "$dest")"; cp "$1" "$dest"' _ {} \;
+          fi
+
+          # 符号表
+          cp out/System.map artifacts/ 2>/dev/null || true
+
+          # 最终配置
+          cp out/.config artifacts/config 2>/dev/null || true
+
+          # 编译日志
+          cp out/build.log artifacts/ 2>/dev/null || true
+
+          # 打包
+          cd artifacts
+          zip -r ../kernel-full-artifacts.zip .
+          cd ..
+
+      - name: Upload full artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-full-artifacts
+          path: kernel/kernel-full-artifacts.zip
+          retention-days: 7
