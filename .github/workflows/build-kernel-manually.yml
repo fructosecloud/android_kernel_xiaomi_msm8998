@@ -40,7 +40,7 @@ jobs:
       - name: Download Clang (r522817)
         run: |
           mkdir -p $HOME/clang
-          curl -L https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/tags/android-13.0.0_r33/clang-r522817.tar.gz | tar -xz -C $HOME/clang
+        curl -L https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android16-release/clang-r547379.tar.gz | tar -xz -C $HOME/clang
           echo "$HOME/clang/bin" >> $GITHUB_PATH
 
       - name: Download Bootlin GCC (aarch64)
