@@ -1,0 +1,39 @@
+name: Build Kernel
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-kernel:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout kernel source
+        uses: actions/checkout@v4
+        with:
+          repository: fructosecloud/android_kernel_xiaomi_msm8998
+          ref: lineage-23.2      # 替换为实际分支
+          path: kernel/source
+
+      - name: Build kernel
+        uses: dabao1955/kernel_build_action@v1.2
+        with:
+          kernel-url: ./kernel/source/
+          config: local_defconfig
+          arch: arm64
+          aosp-clang: true
+          aosp-clang-version: r522817   # Clang 19
+          aosp-gcc: true                 # 同时使用 AOSP GCC 辅助编译
+          ccache: true                  # 开启缓存
+          disable-lto: true             # 禁用 LTO，避免老内核链接失败
+          # extra-make-args: '["LLVM=1", "LLVM_IAS=1"]'  # 暂时注释，需要时再开启
+          anykernel3: false
+
+      - name: Upload kernel image
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-Image.gz-dtb
+          path: kernel/source/arch/arm64/boot/Image.gz-dtb
+          retention-days: 7
