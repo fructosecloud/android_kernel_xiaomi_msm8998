@@ -30,7 +30,7 @@ jobs:
             flex g++-multilib git gperf \
             liblz4-tool libncurses5-dev libssl-dev \
             libxml2-utils lzop rsync schedtool \
-            zip zlib1g-dev \
+            zip zlib1g-dev
   
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -46,13 +46,13 @@ jobs:
       - name: Download Bootlin GCC (aarch64)
         run: |
           mkdir -p $HOME/gcc64
-          curl -L https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2022.08-1.tar.bz2 | tar -xj -C $HOME/gcc64 --strip-components=1
+          curl -L https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2025.08-1.tar.xz | tar -xJ -C $HOME/gcc64 --strip-components=1
           echo "$HOME/gcc64/bin" >> $GITHUB_PATH
 
       - name: Download Bootlin GCC (arm)
         run: |
           mkdir -p $HOME/gcc32
-          curl -L https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--stable-2022.08-1.tar.bz2 | tar -xj -C $HOME/gcc32 --strip-components=1
+          curl -L https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--stable-2025.08-1.tar.xz | tar -xJ -C $HOME/gcc32 --strip-components=1
           echo "$HOME/gcc32/bin" >> $GITHUB_PATH
 
       - name: Build Kernel
