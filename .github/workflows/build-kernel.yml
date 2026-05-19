@@ -35,7 +35,7 @@ jobs:
           other-gcc32-url: https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--stable-2022.08-1.tar.bz2
           ccache: true                  # 开启缓存
           # disable-lto: true             # 禁用 LTO，避免老内核链接失败
-          extra-make-args: '["CROSS_COMPILE_ARM32=arm-linux-gnueabihf-"]'  # 暂时注释，需要时再开启
+          extra-make-args: '["CLANG_TRIPLE=aarch64-linux-gnu-","CROSS_COMPILE=aarch64-linux-","CROSS_COMPILE_ARM32=arm-linux-gnueabihf-"]' # 必要参数
           anykernel3: true
 
 #      - name: Upload kernel image
