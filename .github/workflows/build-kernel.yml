@@ -24,7 +24,7 @@ jobs:
           config: local_defconfig
           arch: arm64
           aosp-clang: true
-          aosp-clang-version: r522817   # Clang 19
+          aosp-clang-version: false
           aosp-gcc: true                 # 同时使用 AOSP GCC 辅助编译
           ccache: true                  # 开启缓存
           disable-lto: true             # 禁用 LTO，避免老内核链接失败
