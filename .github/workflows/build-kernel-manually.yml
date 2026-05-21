@@ -72,6 +72,7 @@ jobs:
           # 编译
           make O=out ARCH=arm64 -j$(nproc) \
             CC=clang \
+            LDGOLD=ld.lld \
             CROSS_COMPILE=aarch64-linux- \
             CROSS_COMPILE_ARM32=arm-linux-gnueabihf- \
             CLANG_TRIPLE=aarch64-linux-gnu- \
