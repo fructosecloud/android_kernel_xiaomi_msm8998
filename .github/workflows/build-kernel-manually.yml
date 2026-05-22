@@ -6,7 +6,7 @@ on:
       defconfig:
         description: 'Defconfig name'
         required: true
-        default: 'local_defconfig'
+        default: 'vendor/xiaomi/mi8998_defconfig'
 
 permissions:
   contents: write
@@ -69,6 +69,10 @@ jobs:
           make O=out mrproper
           make O=out ${{ github.event.inputs.defconfig }}
           
+          # for SAGIT
+          scripts/config --file out/.config -e MACH_SAGIT
+          make O=out olddefconfig
+
           # 编译
           make O=out ARCH=arm64 -j$(nproc) \
             CC=clang \
