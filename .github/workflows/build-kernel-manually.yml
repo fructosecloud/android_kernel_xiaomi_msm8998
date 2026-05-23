@@ -64,20 +64,18 @@ jobs:
           export CLANG_TRIPLE=aarch64-linux-gnu-
           export CC=clang
           export PATH=/usr/lib/ccache:$PATH   # 启用 ccache（可选）
-          
+
           # 清理并配置
           make O=out mrproper
           make O=out ${{ github.event.inputs.defconfig }}
-          
-          # for SAGIT
-          scripts/config --file out/.config -e MACH_SAGIT
-          make O=out olddefconfig
-         
-          # for droidspace 
+ 
+          # for droidspace and SAGIT 
           ARCH=arm64 scripts/kconfig/merge_config.sh \
             -m -O out \
             arch/arm64/configs/vendor/xiaomi/mi8998_defconfig \
-            arch/arm64/configs/droidspace_defconfig
+            arch/arm64/configs/droidspace_defconfig \
+            arch/arm64/configs/vendor/xiaomi/sagit.config
+
           make O=out ARCH=arm64 olddefconfig
 
           # 编译
