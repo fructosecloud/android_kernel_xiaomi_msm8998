@@ -77,7 +77,7 @@ jobs:
           ARCH=arm64 scripts/kconfig/merge_config.sh \
             -m -O out \
             arch/arm64/configs/vendor/xiaomi/mi8998_defconfig \
-            arch/arm64/configs/droidspace_defdefconfig
+            arch/arm64/configs/droidspace_defconfig
           make O=out ARCH=arm64 olddefconfig
 
           # 编译
