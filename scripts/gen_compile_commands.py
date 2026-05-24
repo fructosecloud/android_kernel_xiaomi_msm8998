@@ -88,22 +88,34 @@ def process_line(root_directory, file_directory, command_prefix, relative_path):
     # escape the pound sign '#', either as '\#' or '$(pound)' (depending on the
     # kernel version). The compile_commands.json file is not interepreted
     # by Make, so this code replaces the escaped version with '#'.
-    prefix = command_prefix.replace('\#', '#').replace('$(pound)', '#')
+    prefix = command_prefix.replace(r'\#', '#').replace('$(pound)', '#')
 
     cur_dir = root_directory
-    expected_path = os.path.join(cur_dir, relative_path)
-    if not os.path.exists(expected_path):
-        # Try using file_directory instead. Some of the tools have a different
-        # style of .cmd file than the kernel.
+    # Normalize the relative path to handle '..' correctly
+    normalized_path = os.path.normpath(relative_path)
+
+    # Candidate 1: source file relative to the kernel source root (root_directory)
+    path_from_root = os.path.join(root_directory, normalized_path)
+    # Candidate 2: source file relative to the directory containing the .cmd file
+    path_from_cmd_dir = os.path.join(file_directory, normalized_path)
+
+    if os.path.exists(path_from_root):
+        real_path = path_from_root
+        cur_dir = root_directory
+    elif os.path.exists(path_from_cmd_dir):
+        real_path = path_from_cmd_dir
         cur_dir = file_directory
-        expected_path = os.path.join(cur_dir, relative_path)
-        if not os.path.exists(expected_path):
-            raise ValueError('File %s not in %s or %s' %
-                             (relative_path, root_directory, file_directory))
+    else:
+        raise ValueError('File %s not found in %s or %s' %
+                         (normalized_path, root_directory, file_directory))
+
+    # Output relative path to keep compatibility with old behavior
+    relative_output_path = os.path.relpath(real_path, cur_dir)
+
     return {
         'directory': cur_dir,
-        'file': relative_path,
-        'command': prefix + relative_path,
+        'file': relative_output_path,
+        'command': prefix + relative_output_path,
     }
 
 
