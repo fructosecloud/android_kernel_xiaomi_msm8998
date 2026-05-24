@@ -30,7 +30,7 @@ jobs:
             $HOME/clang
             $HOME/gcc64
             $HOME/gcc32
-          key: toolchains-${{ runner.os }}-clang-r522817-bootlin-2025.08
+          key: toolchains-${{ runner.os }}-clang-r547379-bootlin-2025.08
           restore-keys: toolchains-${{ runner.os }}-
 
       - name: Install dependencies
