@@ -21,6 +21,17 @@ jobs:
           repository: fructosecloud/android_kernel_xiaomi_msm8998
           ref: lineage-23.2-ds   # 修改为实际分支
           path: kernel
+  
+      - name: Cache toolchains
+        id: cache-toolchains
+        uses: actions/cache@v5
+        with:
+          path: |
+            $HOME/clang
+            $HOME/gcc64
+            $HOME/gcc32
+          key: toolchains-${{ runner.os }}-clang-r522817-bootlin-2025.08
+          restore-keys: toolchains-${{ runner.os }}-
 
       - name: Install dependencies
         run: |
@@ -37,19 +48,22 @@ jobs:
         with:
           max-size: '4G'
 
-      - name: Download Clang (r522817)
+      - name: Download Clang (r547379)
+        if: steps.cache-toolchains.outputs.cache-hit != 'true'
         run: |
           mkdir -p $HOME/clang
           curl -L https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android16-release/clang-r547379.tar.gz | tar -xz -C $HOME/clang
           echo "$HOME/clang/bin" >> $GITHUB_PATH
 
       - name: Download Bootlin GCC (aarch64)
+        if: steps.cache-toolchains.outputs.cache-hit != 'true'
         run: |
           mkdir -p $HOME/gcc64
           curl -L https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2025.08-1.tar.xz | tar -xJ -C $HOME/gcc64 --strip-components=1
           echo "$HOME/gcc64/bin" >> $GITHUB_PATH
 
       - name: Download Bootlin GCC (arm)
+        if: steps.cache-toolchains.outputs.cache-hit != 'true'
         run: |
           mkdir -p $HOME/gcc32
           curl -L https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--stable-2025.08-1.tar.xz | tar -xJ -C $HOME/gcc32 --strip-components=1
