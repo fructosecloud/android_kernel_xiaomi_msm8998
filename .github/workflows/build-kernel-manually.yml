@@ -160,7 +160,7 @@ jobs:
       - name: Generate compile_commands.json
         run: |
           cd kernel
-          python scripts/gen_compile_commands.py --log_level INFO
+          python scripts/gen_compile_commands.py -d out/ --log_level INFO
         continue-on-error: true   # 即使失败也不影响内核构建
 
       - name: Upload compile_commands.json
